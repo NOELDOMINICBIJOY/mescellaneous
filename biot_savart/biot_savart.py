@@ -26,10 +26,10 @@ def create_rs(start, end, steps):
         
     return np.array(q)
 
-r_ps = create_rs(-5, 5, 1)
+r_ps = create_rs(0, 10, 1)
 
 s = smp.symbols('s')
-r_dl = Vector(smp.cos(s), smp.sin(s), 0)
+r_dl = Vector(smp.cos(s) + 5, smp.sin(s) + 5, 5)
 r_dl_prime = r_dl.differentiate()
 
 
@@ -43,7 +43,7 @@ while r_p_index < len(r_ps):
     db = Vector(db[0], db[1], db[2])
     
     db_f = db.convert_to_function(s)   
-    b.append(integrate_function(db_f, [0, np.pi]))
+    b.append(integrate_function(db_f, [0, 2*np.pi]))
     
     r_p_index += 1
 
@@ -95,16 +95,16 @@ for i in b_m:
     z_bm.append(i[2])
 
 
-t = np.linspace(0, np.pi, 100)
-wire = Curve(np.cos(t), np.sin(t), 0*t, t)
+t = np.linspace(0, 2*np.pi, 100)
+wire = Curve(np.cos(t) + 5*np.ones(t.shape), np.sin(t) + 5*np.ones(t.shape), 5*np.ones(t.shape), t)
 
 fig = plt.figure(figsize=(10,10))
 ax = fig.gca(projection='3d')
 
 ax.quiver(x_ps, y_ps, z_ps, x_bm, y_bm, z_bm, color = 'orange', length = 0.5)
 ax.plot3D(wire.x, wire.y, wire.z, color='yellow')
-ax.set_xlim(-5, 5)
-ax.set_ylim(-5, 5)
-ax.set_zlim(-5, 5)
+ax.set_xlim(-0, 10)
+ax.set_ylim(-0, 10)
+ax.set_zlim(-0, 10)
 
 plt.show()
