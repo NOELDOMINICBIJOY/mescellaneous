@@ -39,6 +39,31 @@ class Vector:
 
     def cross(self, v2):
         return self.vector.cross(v2.vector)
+    
+class Curve:
+    def __init__(self, x, y, z, parametarising_variable):
+        self.t = parametarising_variable
+        self.x = x
+        self.y = y
+        self.z = z
+        
+        curve = []
+        index = 0
+
+        while index < x.shape[0]:
+            curve.append([self.x[index],self.y[index], self.z[index]])
+            index += 1
+
+        self.curve = np.array(curve)
+
+    def plot_curve(self, figsize = (10, 10), color = '#51ff00', show_plot = False):
+        fig = plt.figure(figsize = figsize)
+        ax = plt.axes(projection = '3d')
+        
+        ax.plot3D(self.x, self.y, self.z, color = color)
+        if show_plot:
+            plt.show
+
 
 def integrate_function(function, bounds):
     return quad_vec(function, bounds[0], bounds[1])[0]
