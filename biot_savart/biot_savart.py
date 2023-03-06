@@ -7,6 +7,8 @@ from sklearn.preprocessing import normalize
 
 plt.style.use(['science', 'notebook', 'grid'])
 
+color_of_wire = input("color of wire: ")
+color_of_field = input("color_of_field: ")
 
 def create_rs(start, end, steps):
     z = y = x = start
@@ -29,7 +31,7 @@ def create_rs(start, end, steps):
 r_ps = create_rs(0, 10, 1)
 
 s = smp.symbols('s')
-r_dl = Vector(smp.cos(s) + 5, smp.sin(s) + 5, 5)
+r_dl = Vector(s + 5, 5,5)
 r_dl_prime = r_dl.differentiate()
 
 
@@ -95,14 +97,14 @@ for i in b_m:
     z_bm.append(i[2])
 
 
-t = np.linspace(0, 2*np.pi, 100)
-wire = Curve(np.cos(t) + 5*np.ones(t.shape), np.sin(t) + 5*np.ones(t.shape), 5*np.ones(t.shape), t)
+t = np.linspace(0, 2*np.pi, 1000)
+wire = Curve(t + 5*np.ones(t.shape),5*np.ones(t.shape), 5*np.ones(t.shape), t)
 
 fig = plt.figure(figsize=(10,10))
 ax = fig.gca(projection='3d')
 
-ax.quiver(x_ps, y_ps, z_ps, x_bm, y_bm, z_bm, color = 'orange', length = 0.5)
-ax.plot3D(wire.x, wire.y, wire.z, color='yellow')
+ax.quiver(x_ps, y_ps, z_ps, x_bm, y_bm, z_bm, color = color_of_field, length = 0.5)
+ax.plot3D(wire.x, wire.y, wire.z, color=color_of_wire)
 ax.set_xlim(-0, 10)
 ax.set_ylim(-0, 10)
 ax.set_zlim(-0, 10)
