@@ -1,59 +1,73 @@
+# importing all necessary modules
+
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy import prod
+import sympy as smp
+import scienceplots
 
-x = np.arange(-100000,100000,0.1)
-y = np.e**x
+plt.style.use(['science', 'notebook','grid'])
+plt.style.use(['science', 'notebook','grid', 'dark_background'])
+plt.style.use(['science', 'notebook','grid'])
 
-def differentiate(x, y):
-    dy_dx = np.gradient(y, x)
-    return dy_dx
+# defing our function
+# if you wish to change the function do it here
 
-def n_th_ord_derivative(n, y):
-    c = 0
-    y_n_x = y
+x = smp.symbols('x')
+sigma = 0.75
+amplitude = 2
+y = amplitude*smp.exp(-(x**2)/sigma**2)
 
-    while c < n:        
-        y_n_x = differentiate(x, y_n_x)
-        
-        c += 1
-        
-    return y_n_x
+# defining a function that plots the above defined sympy expression as a matplotlib plot
 
-def index(char, iterable):
-    c = 0
-    for i in iterable:
-        if i.round(4) == char:
-            return c
-        c += 1
-
-def y_x_0(x_0,x ,y):
-    i = index(x_0, x)
-    return y[i]
-
-
-def factorial(n):
-    fact = 1
+def plot_smp_func(x, y, title, color = '#00ff00', xlim = (-5, 5), ylim = (-5, 5), xlabel = 'x', ylabel = 'y', grid = True, legend = True):
     
-    for i in range(1,n+1):
-        fact = fact * i
-    return fact
+    y_f = smp.lambdify(x, y)    
+    x_f = np.linspace(xlim[0], xlim[1], 500)
     
-
-def taylor_app(n, a):
-    y_app = np.zeros(x.shape)
-
-    for i in range(0, n):
-        y_app = y_app + (y_x_0(a, x, n_th_ord_derivative(i, y))*((x-a)**i))/factorial(i)
-    return y_app
-
-if __name__=='__main__':
-    y_app = taylor_app(22, 0)
-
-    plt.plot(x,y_app, color='black', lw =2, ms=3, label='function_approximation')
-
-    plt.ylim([-2, 2])   
-    plt.xlim([-13, 8])   
-    plt.grid()
-    plt.legend()
+    plt.plot(x_f, y_f(x_f), color = color, label = title)
+    plt.xlim(xlim)
+    plt.ylim(ylim)
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    
+    if grid:
+        plt.grid()
+    if legend:
+        plt.legend()
+        
     plt.show()
+
+# defining a function that returns the nth order derivative of any* mathematical function
+
+def derivative(func, x, n):
+    y_n_prime = [func]
+    while n > 0:
+        y_n_prime.append(smp.diff(y_n_prime[-1], x))
+        n -= 1
+    return y_n_prime
+
+# defining a function that returns the taylor series of any* mathematical function
+
+def taylor_app(i, func, x, a):
+    series = [func]
+    n = 0
+    
+    while i >= 0:
+        f_n = derivative(func, x, n)[n]
+        f_n_a = f_n.subs(x, a)
+        
+        ith_approximation = (f_n_a/smp.factorial(n))*(x-a)**n
+        series.append(ith_approximation)
+        i -= 1
+        n += 1
+            
+    return sum(series[1:])
+
+if __name__ == "__main__":
+    x = smp.symbols('x')
+    sigma = 0.75
+    amplitude = 2
+    y = amplitude*smp.exp(-(x**2)/sigma**2)
+    plot_smp_func(x, taylor_app(10, y, x, 0), 'taylor_series_expansion')
+
