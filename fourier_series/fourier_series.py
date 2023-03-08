@@ -2,17 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 L = 1
-x_1 = np.arange(0, (1/3)*L,0.000001)
-y_1 = np.zeros(x_1.shape)
+x = np.arange(0, (1/3)*L,0.000001)
+func = 0.5*x
 
-x_2 = np.arange((1/3)*L, (2/3)*L,0.000001)
-y_2 = np.ones(x_2.shape)
-
-x_3 = np.arange((2/3)*L, L,0.000001)
-y_3 = np.zeros(x_3.shape)
-
-x = np.concatenate((x_1, x_2, x_3))
-func = np.concatenate((y_1, y_2, y_3))
 
 a_0 = (1/L)*(np.cumsum(func)* (x[1] - x[0]))[-1]
 a_0 = np.round(a_0, 5)

@@ -1,15 +1,17 @@
-def square(f):
-    def inner():
-        x = f(y)
-        return x**2
+import numpy as np 
+
+def square(func):
+    def inner(*args, **kwargs):
+        return func(*args, **kwargs)**2
     return inner
 
 @square
-def f(x):
-    return x+1
+def func(x):
+    return np.sin(x)
 
-a = f()
-print(a(2))
+if __name__ == "__main__":
+    print(func(np.pi/4))
+
 
 
 
