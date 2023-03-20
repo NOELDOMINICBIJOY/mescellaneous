@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import sympy as smp
 import scienceplots
 from prereqs.vecs_and_curves import *
-from sklearn.preprocessing import normalize
 
 plt.style.use(['science', 'notebook', 'grid'])
 
